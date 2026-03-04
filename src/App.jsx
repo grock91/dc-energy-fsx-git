@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 
 // ═══════════════════════════════════════════════════════════════════
-//  FUTURESCALEX BRAND PALETTE
+//  COLOR PALETTE
 // ═══════════════════════════════════════════════════════════════════
 const FSX = {
   bg:       "#0B1120",   // deep navy (FSX site background)
@@ -18,15 +18,6 @@ const FSX = {
   dim:      "#64748B",   // tertiary text (slate-500)
   faint:    "#334155",   // very muted (slate-700)
 };
-
-// ═══════════════════════════════════════════════════════════════════
-//  CTA CONFIGURATION — UPDATE THESE TO YOUR ACTUAL URLS
-// ═══════════════════════════════════════════════════════════════════
-const CTA_PRIMARY   = "https://futurescalex.com/contact-us?hsLang=en&option=Schedule%20a%20meeting";
-const CTA_SOLUTIONS = "https://futurescalex.com/solution";
-const CTA_ENERGY_AI = "https://futurescalex.com/energyandai";
-const FSX_LOGO_URL  = "https://futurescalex.com/hs-fs/hubfs/Fy25/futurescalex-logo-full-colour-rgb-827px@72ppi%20(3)%20(1)%20(1).png?width=544&height=70";
-const FSX_HOME      = "https://futurescalex.com";
 
 // ═══════════════════════════════════════════════════════════════════
 //  DATA SOURCES
@@ -222,11 +213,7 @@ export default function DCEnergyDashboard() {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [hoveredItem, setHoveredItem] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [showCTA, setShowCTA] = useState(false);
-  const [interactions, setInteractions] = useState(0);
   const intervalRef = useRef(null);
-
-  useEffect(() => { if (interactions >= 3 && !showCTA) setShowCTA(true); }, [interactions, showCTA]);
 
   useEffect(() => {
     if (isPlaying) {
@@ -250,7 +237,6 @@ export default function DCEnergyDashboard() {
   const maxBarValue = useMemo(() => Math.max(...currentData.map(d => d.value), 1), [currentData]);
 
   const handleDrillDown = useCallback((item) => {
-    setInteractions(p => p + 1);
     if (level === "region") { setSelectedRegion(item.name); setLevel("country"); }
     else if (level === "country" && COUNTRY_DATA[item.name]?.states) { setSelectedCountry(item.name); setLevel("state"); }
   }, [level]);
@@ -281,25 +267,12 @@ export default function DCEnergyDashboard() {
     return { exceeded, headline, approaching, approachPct, recentBig, dcTWh, total: exceeded.length };
   }, [globalTWh]);
 
+  // Threshold color: matches the legend consistently across all levels
+  const thresholdColor = (val) => val > 15 ? FSX.coral : val > 5 ? FSX.amber : FSX.teal;
+
   return (
     <div style={{ minHeight: "100vh", background: "linear-gradient(170deg, " + FSX.bg + " 0%, #0D1525 40%, " + FSX.surface + " 100%)", color: FSX.text, fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif" }}>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
-
-      {/* ═══ TOP BAR — FSX LOGO + NAV ═══ */}
-      <div style={{ padding: "14px 32px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(0,191,165,0.12)", background: "linear-gradient(90deg, #152238 0%, #162640 50%, #152238 100%)" }}>
-        <a href={FSX_HOME} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-          <img src={FSX_LOGO_URL} alt="FutureScaleX" style={{ height: 28, objectFit: "contain" }} crossOrigin="anonymous"
-            onError={(e) => { e.target.style.display = "none"; e.target.nextSibling.style.display = "flex"; }} />
-          <span style={{ display: "none", fontSize: 16, fontWeight: 700, color: FSX.teal, letterSpacing: 0.5, alignItems: "center", gap: 4 }}>
-            Future<span style={{ color: FSX.text }}>Scale</span>X
-          </span>
-        </a>
-        <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-          <a href={CTA_ENERGY_AI} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: "#CBD5E1", textDecoration: "none", padding: "5px 12px", borderRadius: 6, border: "1px solid rgba(255,255,255,0.1)" }}>Energy & AI Research</a>
-          <a href={CTA_SOLUTIONS} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: "#CBD5E1", textDecoration: "none", padding: "5px 12px", borderRadius: 6, border: "1px solid rgba(255,255,255,0.1)" }}>Solutions</a>
-          <a href={CTA_PRIMARY} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, fontWeight: 600, color: FSX.bg, textDecoration: "none", padding: "5px 16px", borderRadius: 6, background: FSX.teal }}>Schedule a Briefing</a>
-        </div>
-      </div>
 
       {/* ═══ HEADER ═══ */}
       <div style={{ padding: "28px 32px 24px", borderBottom: "1px solid " + FSX.border, background: "linear-gradient(180deg, rgba(0,191,165,0.03) 0%, transparent 100%)" }}>
@@ -310,8 +283,8 @@ export default function DCEnergyDashboard() {
               How Much of the Grid Do <span style={{ color: FSX.teal, fontStyle: "italic" }}>Data Centers</span> Consume?
             </h1>
             <p style={{ fontSize: 13, color: FSX.muted, marginTop: 10, lineHeight: 1.65 }}>
-              Data centers consumed <span style={{ color: FSX.white, fontWeight: 600 }}>1.5% of global electricity</span> in 2024 — more than many entire countries.
-              This dashboard tracks <span style={{ color: FSX.white, fontWeight: 600 }}>DC electricity as a share of total grid load</span> across regions, countries, and states — from 2000 to 2050 projections.
+              Data centers consumed <span style={{ color: FSX.white, fontWeight: 600 }}>1.5% of global electricity</span> in 2024, more than many entire countries.
+              This dashboard tracks <span style={{ color: FSX.white, fontWeight: 600 }}>DC electricity as a share of total grid load</span> across regions, countries, and states, from 2000 to 2050 projections.
             </p>
             <div style={{ display: "flex", gap: 16, marginTop: 12, fontSize: 12, color: FSX.dim }}>
               <span><span style={{ color: FSX.teal, fontWeight: 600 }}>1.</span> Drag the year slider</span>
@@ -322,7 +295,7 @@ export default function DCEnergyDashboard() {
           <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
             <div style={{ textAlign: "right" }}>
               <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: FSX.dim, letterSpacing: 1 }}>GLOBAL DC SHARE</div>
-              <div style={{ fontSize: 32, fontWeight: 700, fontFamily: "'JetBrains Mono', monospace", color: FSX.teal }}>{globalPct.toFixed(1)}%</div>
+              <div style={{ fontSize: 32, fontWeight: 700, fontFamily: "'JetBrains Mono', monospace", color: thresholdColor(globalPct) }}>{globalPct.toFixed(1)}%</div>
               <div style={{ fontSize: 10, color: FSX.faint, fontFamily: "'JetBrains Mono', monospace" }}>of world grid</div>
             </div>
             <div style={{ width: 1, height: 48, background: FSX.border }} />
@@ -385,26 +358,26 @@ export default function DCEnergyDashboard() {
       {/* ═══ YEAR SLIDER ═══ */}
       <div style={{ padding: "16px 32px", background: "rgba(0,0,0,0.15)", borderBottom: "1px solid " + FSX.border }}>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <button onClick={() => { setIsPlaying(!isPlaying); setInteractions(p => p + 1); }}
-            style={{ width: 36, height: 36, borderRadius: "50%", background: isPlaying ? "rgba(255,107,107,0.12)" : "rgba(0,191,165,0.12)", border: "1px solid " + (isPlaying ? "rgba(255,107,107,0.3)" : "rgba(0,191,165,0.3)"), color: isPlaying ? FSX.coral : FSX.teal, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, flexShrink: 0 }}>
+          <button onClick={() => setIsPlaying(!isPlaying)}
+            style={{ width: 42, height: 42, borderRadius: "50%", background: isPlaying ? FSX.coral : FSX.teal, border: "none", color: FSX.bg, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, fontWeight: 700, flexShrink: 0, boxShadow: isPlaying ? "0 0 16px rgba(255,107,107,0.4)" : "0 0 16px " + FSX.tealGlow }}>
             {isPlaying ? "\u23F8" : "\u25B6"}
           </button>
           <div style={{ flex: 1, position: "relative" }}>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
               <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: FSX.dim }}>2000</span>
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, fontWeight: 700, color: isForecast ? FSX.amber : FSX.teal, display: "flex", alignItems: "center", gap: 6 }}>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, fontWeight: 700, color: thresholdColor(globalPct), display: "flex", alignItems: "center", gap: 6 }}>
                 {year}
                 {isForecast && <span style={{ fontSize: 9, padding: "2px 6px", borderRadius: 4, background: "rgba(255,183,77,0.12)", color: FSX.amber, border: "1px solid rgba(255,183,77,0.25)", letterSpacing: 1 }}>FORECAST</span>}
                 {!isForecast && year >= 2020 && <span style={{ fontSize: 9, padding: "2px 6px", borderRadius: 4, background: "rgba(0,191,165,0.12)", color: FSX.teal, border: "1px solid rgba(0,191,165,0.25)", letterSpacing: 1 }}>REPORTED</span>}
               </span>
               <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: FSX.dim }}>2050</span>
             </div>
-            <div style={{ position: "relative", height: 24, display: "flex", alignItems: "center" }}>
-              <div style={{ position: "absolute", left: 0, right: 0, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.06)" }} />
-              <div style={{ position: "absolute", left: 0, height: 4, borderRadius: 2, width: ((year - 2000) / 50 * 100) + "%", background: isForecast ? "linear-gradient(90deg, " + FSX.teal + " 0%, " + FSX.teal + " 52%, " + FSX.amber + " 100%)" : FSX.teal }} />
-              <div style={{ position: "absolute", left: ((2026 - 2000) / 50 * 100) + "%", top: -2, width: 1, height: 28, background: "rgba(255,183,77,0.4)" }} />
-              <input type="range" min={2000} max={2050} step={1} value={year} onChange={e => { setYear(+e.target.value); setInteractions(p => p + 1); }} style={{ position: "absolute", left: 0, right: 0, width: "100%", height: 24, opacity: 0, cursor: "pointer", zIndex: 2 }} />
-              <div style={{ position: "absolute", left: "calc(" + ((year - 2000) / 50 * 100) + "% - 8px)", width: 16, height: 16, borderRadius: "50%", background: isForecast ? FSX.amber : FSX.teal, boxShadow: "0 0 12px " + (isForecast ? "rgba(255,183,77,0.4)" : FSX.tealGlow), border: "2px solid " + FSX.bg, pointerEvents: "none" }} />
+            <div style={{ position: "relative", height: 28, display: "flex", alignItems: "center" }}>
+              <div style={{ position: "absolute", left: 0, right: 0, height: 8, borderRadius: 4, background: "rgba(255,255,255,0.06)" }} />
+              <div style={{ position: "absolute", left: 0, height: 8, borderRadius: 4, width: ((year - 2000) / 50 * 100) + "%", background: globalPct > 5 ? (globalPct > 15 ? "linear-gradient(90deg, " + FSX.teal + " 0%, " + FSX.amber + " 60%, " + FSX.coral + " 100%)" : "linear-gradient(90deg, " + FSX.teal + " 0%, " + FSX.amber + " 100%)") : FSX.teal, transition: "width 0.15s ease" }} />
+              <div style={{ position: "absolute", left: ((2026 - 2000) / 50 * 100) + "%", top: -2, width: 2, height: 32, background: "rgba(255,183,77,0.5)", borderRadius: 1 }} />
+              <input type="range" min={2000} max={2050} step={1} value={year} onChange={e => setYear(+e.target.value)} style={{ position: "absolute", left: 0, right: 0, width: "100%", height: 28, opacity: 0, cursor: "pointer", zIndex: 2 }} />
+              <div style={{ position: "absolute", left: "calc(" + ((year - 2000) / 50 * 100) + "% - 10px)", width: 20, height: 20, borderRadius: "50%", background: globalPct > 15 ? FSX.coral : globalPct > 5 ? FSX.amber : FSX.teal, boxShadow: "0 0 14px " + (globalPct > 15 ? "rgba(255,107,107,0.5)" : globalPct > 5 ? "rgba(255,183,77,0.5)" : FSX.tealGlow), border: "3px solid " + FSX.bg, pointerEvents: "none", transition: "background 0.3s ease" }} />
             </div>
           </div>
         </div>
@@ -428,6 +401,7 @@ export default function DCEnergyDashboard() {
         {currentData.map((item, idx) => {
           const canDrill = (level === "region") || (level === "country" && COUNTRY_DATA[item.name]?.states);
           const barWidth = Math.max((item.value / Math.max(maxBarValue, 1)) * 100, 0.5);
+          const barColor = thresholdColor(item.value);
           const intensity = item.value > 20 ? 1 : item.value > 10 ? 0.85 : item.value > 5 ? 0.7 : item.value > 2 ? 0.55 : 0.4;
           return (
             <div key={item.name} onClick={() => canDrill && handleDrillDown(item)} onMouseEnter={() => setHoveredItem(item.name)} onMouseLeave={() => setHoveredItem(null)}
@@ -438,43 +412,24 @@ export default function DCEnergyDashboard() {
                   {item.name}
                   {canDrill && <span style={{ fontSize: 9, color: FSX.dim, background: "rgba(0,191,165,0.08)", padding: "1px 5px", borderRadius: 3, border: "1px solid rgba(0,191,165,0.15)" }}>drill {"\u2192"}</span>}
                 </div>
-                <div style={{ marginTop: 3 }}><Sparkline points={item.points} year={year} color={item.color} width={130} height={26} /></div>
+                <div style={{ marginTop: 3 }}><Sparkline points={item.points} year={year} color={barColor} width={130} height={26} /></div>
               </div>
               <div style={{ flex: 1, position: "relative", height: 26 }}>
-                <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: barWidth + "%", borderRadius: 6, background: "linear-gradient(90deg, " + item.color + Math.round(intensity * 255).toString(16).padStart(2, "0") + " 0%, " + item.color + Math.round(intensity * 0.5 * 255).toString(16).padStart(2, "0") + " 100%)", transition: "width 0.3s ease" }} />
+                <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: barWidth + "%", borderRadius: 6, background: "linear-gradient(90deg, " + barColor + Math.round(intensity * 255).toString(16).padStart(2, "0") + " 0%, " + barColor + Math.round(intensity * 0.5 * 255).toString(16).padStart(2, "0") + " 100%)", transition: "width 0.3s ease" }} />
                 {item.value > 12 && <div style={{ position: "absolute", left: 8, top: "50%", transform: "translateY(-50%)", fontSize: 10, fontFamily: "'JetBrains Mono', monospace", color: "rgba(255,255,255,0.7)", zIndex: 1 }}>{item.value.toFixed(1)}%</div>}
               </div>
               <div style={{ width: 65, textAlign: "right", flexShrink: 0, fontFamily: "'JetBrains Mono', monospace" }}>
-                <div style={{ fontSize: 17, fontWeight: 700, color: item.value > 15 ? FSX.coral : item.value > 5 ? FSX.amber : FSX.teal }}>{item.value.toFixed(1)}%</div>
+                <div style={{ fontSize: 17, fontWeight: 700, color: barColor }}>{item.value.toFixed(1)}%</div>
               </div>
             </div>
           );
         })}
 
-        {/* ═══ CTA BANNER — after engagement ═══ */}
-        {showCTA && (
-          <div style={{ marginTop: 20, padding: "24px 28px", borderRadius: 12, background: "linear-gradient(135deg, rgba(0,191,165,0.06) 0%, rgba(0,137,123,0.06) 100%)", border: "1px solid rgba(0,191,165,0.2)", textAlign: "center" }}>
-            <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 2, color: FSX.teal, textTransform: "uppercase", marginBottom: 8 }}>FutureScaleX Insights</div>
-            <div style={{ fontSize: 17, fontWeight: 600, color: FSX.white, marginBottom: 6 }}>Grid load is just one variable in <span style={{ color: FSX.teal, fontStyle: "italic" }}>sustainable growth</span></div>
-            <div style={{ fontSize: 12, color: FSX.muted, marginBottom: 18, maxWidth: 520, margin: "0 auto 18px" }}>
-              Our six-lens methodology maps the full landscape — policy, technology, techno-economics, supply chain, digitalization, and partnerships — so you can act on what's viable, scalable, and commercially sound.
-            </div>
-            <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-              <a href={CTA_PRIMARY} target="_blank" rel="noopener noreferrer" style={{ display: "inline-block", padding: "10px 24px", borderRadius: 8, fontSize: 13, fontWeight: 600, background: FSX.teal, color: FSX.bg, textDecoration: "none", boxShadow: "0 4px 20px " + FSX.tealGlow }}>
-                Schedule a Briefing {"\u2192"}
-              </a>
-              <a href={CTA_SOLUTIONS} target="_blank" rel="noopener noreferrer" style={{ display: "inline-block", padding: "10px 24px", borderRadius: 8, fontSize: 13, fontWeight: 600, background: "transparent", border: "1px solid rgba(0,191,165,0.3)", color: FSX.teal, textDecoration: "none" }}>
-                Explore Solutions
-              </a>
-            </div>
-          </div>
-        )}
-
         {/* ═══ LEGEND & SOURCES ═══ */}
         <div style={{ marginTop: 20, padding: "18px 20px", borderRadius: 10, background: "rgba(255,255,255,0.015)", border: "1px solid " + FSX.border }}>
           <div style={{ fontSize: 11, fontWeight: 600, color: FSX.dim, marginBottom: 10, letterSpacing: 1, textTransform: "uppercase", fontFamily: "'JetBrains Mono', monospace" }}>How to Read This Dashboard</div>
           <div style={{ display: "flex", gap: 20, flexWrap: "wrap", marginBottom: 12 }}>
-            {[{ color: FSX.teal, label: "< 5% of grid \u2014 modest share" }, { color: FSX.amber, label: "5\u201315% \u2014 significant load" }, { color: FSX.coral, label: "> 15% \u2014 critical grid pressure" }].map(t => (
+            {[{ color: FSX.teal, label: "< 5% of grid, modest share" }, { color: FSX.amber, label: "5\u201315%, significant load" }, { color: FSX.coral, label: "> 15%, critical grid pressure" }].map(t => (
               <div key={t.label} style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <div style={{ width: 10, height: 10, borderRadius: 3, background: t.color }} />
                 <span style={{ fontSize: 11, color: FSX.muted }}>{t.label}</span>
@@ -503,21 +458,6 @@ export default function DCEnergyDashboard() {
           <div style={{ fontSize: 9, color: FSX.faint, marginTop: 12, lineHeight: 1.5 }}>
             IEA data used under Creative Commons Attribution 4.0 International License (CC BY 4.0). US government data (EIA, LBNL, DOE) is public domain. This dashboard synthesizes publicly reported aggregate statistics.
           </div>
-        </div>
-
-        {/* ═══ PERSISTENT FOOTER CTA ═══ */}
-        <div style={{ marginTop: 16, marginBottom: 24, padding: "14px 20px", borderRadius: 10, background: "rgba(0,191,165,0.03)", border: "1px solid rgba(0,191,165,0.1)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
-          <div>
-            <div style={{ fontSize: 12, color: FSX.muted }}>
-              Need the full picture? A <a href={FSX_HOME} target="_blank" rel="noopener noreferrer" style={{ color: FSX.teal, textDecoration: "none", fontWeight: 600 }}>FutureScaleX</a> research tool
-            </div>
-            <div style={{ fontSize: 11, color: FSX.dim, marginTop: 2 }}>
-              Systems-level thinking for <span style={{ fontStyle: "italic" }}>sustainable growth</span> across energy, chemicals & materials, and consumer sectors.
-            </div>
-          </div>
-          <a href={CTA_PRIMARY} target="_blank" rel="noopener noreferrer" style={{ padding: "8px 20px", borderRadius: 6, fontSize: 12, fontWeight: 600, background: FSX.teal, color: FSX.bg, textDecoration: "none", whiteSpace: "nowrap" }}>
-            Talk to an Expert {"\u2192"}
-          </a>
         </div>
       </div>
     </div>
