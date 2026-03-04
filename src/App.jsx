@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import { feature } from "topojson-client";
 
 // ═══════════════════════════════════════════════════════════════════
 //  COLOR PALETTE
@@ -222,9 +223,84 @@ function useIsMobile(breakpoint = 768) {
   return mobile;
 }
 
+// ─── WORLD MAP ───────────────────────────────────────────────────
+// ISO 3166-1 numeric → alpha-2 (for world-atlas matching)
+const N2A={"032":"ar","036":"au","040":"at","048":"bh","050":"bd","056":"be","068":"bo","076":"br","100":"bg","104":"mm","116":"kh","124":"ca","144":"lk","152":"cl","156":"cn","170":"co","188":"cr","191":"hr","196":"cy","203":"cz","208":"dk","222":"sv","233":"ee","246":"fi","250":"fr","276":"de","288":"gh","300":"gr","320":"gt","340":"hn","348":"hu","352":"is","356":"in","360":"id","372":"ie","376":"il","380":"it","388":"jm","392":"jp","404":"ke","410":"kr","428":"lv","440":"lt","442":"lu","458":"my","470":"mt","484":"mx","499":"me","524":"np","528":"nl","554":"nz","566":"ng","578":"no","586":"pk","591":"pa","600":"py","608":"ph","616":"pl","620":"pt","642":"ro","643":"ru","682":"sa","688":"rs","702":"sg","703":"sk","704":"vn","710":"za","724":"es","752":"se","756":"ch","764":"th","780":"tt","788":"tn","792":"tr","784":"ae","826":"gb","818":"eg","840":"us","858":"uy"};
+const ATLAS_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+
+function WorldMap({ exceededCodes, headlineCode, approachingCode, width, height }) {
+  const [features, setFeatures] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(ATLAS_URL).then(r => r.json()).then(world => {
+      if (!cancelled) setFeatures(feature(world, world.objects.countries).features);
+    }).catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
+
+  if (!features || width < 10) return (
+    <div style={{ width, height, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <span style={{ color: FSX.dim, fontSize: 11, fontFamily: "'JetBrains Mono', monospace" }}>Loading map...</span>
+    </div>
+  );
+
+  // Equirectangular projection clipped to useful latitudes
+  const LAT_MAX = 84, LAT_MIN = -60, pad = 4;
+  const w = width - pad * 2, h = height - pad * 2;
+  const proj = ([lon, lat]) => [
+    pad + ((lon + 180) / 360) * w,
+    pad + ((LAT_MAX - Math.max(LAT_MIN, Math.min(LAT_MAX, lat))) / (LAT_MAX - LAT_MIN)) * h
+  ];
+
+  const ringToPath = (ring) => "M" + ring.map(p => { const [x, y] = proj(p); return x.toFixed(1) + "," + y.toFixed(1); }).join("L") + "Z";
+  const geoPath = (geom) => {
+    if (!geom) return "";
+    if (geom.type === "Polygon") return geom.coordinates.map(ringToPath).join(" ");
+    if (geom.type === "MultiPolygon") return geom.coordinates.map(poly => poly.map(ringToPath).join(" ")).join(" ");
+    return "";
+  };
+
+  const exceededSet = new Set(exceededCodes);
+
+  // Sort: base countries first, exceeded on top, headline last
+  const sorted = [...features].sort((a, b) => {
+    const ac = N2A[String(a.id).padStart(3, "0")] || "";
+    const bc = N2A[String(b.id).padStart(3, "0")] || "";
+    const aRank = ac === headlineCode ? 3 : ac === approachingCode ? 2 : exceededSet.has(ac) ? 1 : 0;
+    const bRank = bc === headlineCode ? 3 : bc === approachingCode ? 2 : exceededSet.has(bc) ? 1 : 0;
+    return aRank - bRank;
+  });
+
+  return (
+    <svg width={width} height={height} viewBox={"0 0 " + width + " " + height} style={{ display: "block" }}>
+      {/* Ocean */}
+      <rect x={0} y={0} width={width} height={height} fill="transparent" />
+      {sorted.map((f, i) => {
+        const code = N2A[String(f.id).padStart(3, "0")] || "";
+        const isExceeded = exceededSet.has(code);
+        const isHeadline = code === headlineCode;
+        const isApproaching = code === approachingCode;
+        const d = geoPath(f.geometry);
+        if (!d) return null;
+        return (
+          <path key={i} d={d}
+            fill={isHeadline ? FSX.teal : isExceeded ? "rgba(0,191,165,0.4)" : "rgba(255,255,255,0.04)"}
+            stroke={isHeadline ? FSX.white : isApproaching ? FSX.amber : isExceeded ? "rgba(0,191,165,0.2)" : "rgba(255,255,255,0.06)"}
+            strokeWidth={isHeadline ? 1.5 : isApproaching ? 1.2 : 0.3}
+            style={isHeadline ? { filter: "drop-shadow(0 0 6px rgba(0,191,165,0.6))" } : undefined}
+          />
+        );
+      })}
+    </svg>
+  );
+}
+
 // ─── MAIN COMPONENT ───────────────────────────────────────────────
 export default function DCEnergyDashboard() {
   const mob = useIsMobile();
+  const mapRef = useRef(null);
+  const [mapW, setMapW] = useState(800);
   const [year, setYear] = useState(2024);
   const [level, setLevel] = useState("region");
   const [selectedRegion, setSelectedRegion] = useState(null);
@@ -241,6 +317,14 @@ export default function DCEnergyDashboard() {
     }
     return () => clearInterval(intervalRef.current);
   }, [isPlaying]);
+
+  // Measure map container width
+  useEffect(() => {
+    if (!mapRef.current) return;
+    const ro = new ResizeObserver(entries => { for (const e of entries) setMapW(e.contentRect.width); });
+    ro.observe(mapRef.current);
+    return () => ro.disconnect();
+  }, []);
 
   const globalTWh = useMemo(() => interp(GLOBAL_TWH, year), [year]);
   const globalPct = useMemo(() => interp(GLOBAL_PCT, year), [year]);
@@ -327,48 +411,59 @@ export default function DCEnergyDashboard() {
         </div>
       </div>
 
-      {/* ═══ COUNTRY COMPARISON BANNER ═══ */}
+      {/* ═══ WORLD MAP: COUNTRY COMPARISON ═══ */}
       {countryComparison.headline && (
-        <div style={{ padding: (mob ? 14 : 18) + "px " + px + "px", borderBottom: "1px solid " + FSX.border, background: "linear-gradient(90deg, rgba(0,191,165,0.04) 0%, rgba(0,191,165,0.01) 50%, rgba(0,191,165,0.04) 100%)" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: mob ? 12 : 20, flexDirection: mob ? "column" : "row" }}>
-            {/* Left: headline analogy */}
-            <div style={{ flex: "1 1 auto", minWidth: 0 }}>
+        <div ref={mapRef} style={{ borderBottom: "1px solid " + FSX.border, background: "linear-gradient(180deg, rgba(0,191,165,0.03) 0%, rgba(0,0,0,0.2) 100%)", position: "relative", overflow: "hidden" }}>
+          {/* Map (always in flow, sets container height) */}
+          <div style={{ opacity: mob ? 1 : 0.85 }}>
+            <WorldMap
+              exceededCodes={countryComparison.exceeded.map(c => c.code)}
+              headlineCode={countryComparison.headline.code}
+              approachingCode={countryComparison.approaching?.code}
+              width={mapW}
+              height={mob ? 160 : 220}
+            />
+          </div>
+
+          {/* Text overlay (absolute on desktop, stacked on mobile) */}
+          <div style={{ position: mob ? "relative" : "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: mob ? "stretch" : "center", padding: (mob ? 12 : 20) + "px " + px + "px", background: mob ? "none" : "linear-gradient(90deg, rgba(11,17,32,0.92) 0%, rgba(11,17,32,0.7) 45%, transparent 70%)", zIndex: 1 }}>
+            <div style={{ maxWidth: mob ? "100%" : 480 }}>
               <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: mob ? 9 : 10, letterSpacing: 2, color: FSX.dim, textTransform: "uppercase", marginBottom: 6 }}>
                 Scale Comparison {"\u00B7"} {year}
               </div>
-              <div style={{ fontSize: mob ? 14 : 16, fontWeight: 600, color: FSX.text, lineHeight: 1.5 }}>
+              <div style={{ fontSize: mob ? 14 : 17, fontWeight: 600, color: FSX.text, lineHeight: 1.5 }}>
                 Data centers consume more electricity than{" "}
-                <span style={{ color: FSX.teal, fontWeight: 700, fontStyle: "italic", fontSize: mob ? 15 : 18, display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(0,191,165,0.08)", padding: "2px 10px", borderRadius: 6, border: "1px solid rgba(0,191,165,0.15)" }}>
-                  <Flag code={countryComparison.headline.code} size={mob ? 18 : 22} /> {countryComparison.headline.name}
+                <span style={{ color: FSX.teal, fontWeight: 700, fontStyle: "italic", fontSize: mob ? 15 : 19, display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(0,191,165,0.1)", padding: "2px 10px", borderRadius: 6, border: "1px solid rgba(0,191,165,0.2)" }}>
+                  <Flag code={countryComparison.headline.code} size={mob ? 18 : 24} /> {countryComparison.headline.name}
                 </span>
                 {"\u2019"}s entire electricity grid
               </div>
-              <div style={{ fontSize: mob ? 10 : 11, color: FSX.dim, marginTop: 6, fontFamily: "'JetBrains Mono', monospace" }}>
-                {countryComparison.headline.name}: {countryComparison.headline.twh} TWh {"\u00B7"} Global DCs: {Math.round(countryComparison.dcTWh)} TWh
-                <span style={{ marginLeft: 12, color: FSX.muted }}>{"\u2192"} exceeds <span style={{ color: FSX.teal, fontWeight: 600 }}>{countryComparison.total}</span> countries</span>
-              </div>
-            </div>
-
-            {/* Right: recently exceeded country pills + approaching (hidden on mobile) */}
-            {!mob && <div style={{ flex: "0 0 auto", display: "flex", flexDirection: "column", gap: 8, alignItems: "flex-end" }}>
-              <div style={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "flex-end" }}>
-                {countryComparison.recentBig.map(c => (
-                  <span key={c.name} style={{ fontSize: 10, padding: "3px 8px", borderRadius: 5, background: "rgba(0,191,165,0.06)", border: "1px solid rgba(0,191,165,0.12)", color: FSX.muted, fontFamily: "'JetBrains Mono', monospace", whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", gap: 4 }}>
-                    <Flag code={c.code} size={14} /> {c.name} <span style={{ color: FSX.dim }}>{c.twh} TWh</span>
-                  </span>
-                ))}
+              <div style={{ fontSize: mob ? 10 : 11, color: FSX.muted, marginTop: 8, fontFamily: "'JetBrains Mono', monospace", display: "flex", gap: mob ? 8 : 16, flexWrap: "wrap", alignItems: "center" }}>
+                <span>{countryComparison.headline.name}: <span style={{ color: FSX.white }}>{countryComparison.headline.twh} TWh</span></span>
+                <span>Global DCs: <span style={{ color: FSX.teal }}>{Math.round(countryComparison.dcTWh)} TWh</span></span>
+                <span style={{ color: FSX.teal }}>{countryComparison.total} countries exceeded</span>
               </div>
               {countryComparison.approaching && (
-                <div style={{ fontSize: 10, color: FSX.dim, fontFamily: "'JetBrains Mono', monospace", textAlign: "right", display: "flex", alignItems: "center", gap: 6 }}>
+                <div style={{ marginTop: 8, fontSize: 10, color: FSX.dim, fontFamily: "'JetBrains Mono', monospace", display: "flex", alignItems: "center", gap: 8 }}>
                   <span>Approaching: <Flag code={countryComparison.approaching.code} size={14} /> {countryComparison.approaching.name} ({countryComparison.approaching.twh} TWh)</span>
-                  <div style={{ width: 80, height: 3, borderRadius: 2, background: "rgba(255,255,255,0.06)", position: "relative", overflow: "hidden", display: "inline-block" }}>
-                    <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: Math.min(countryComparison.approachPct, 100) + "%", borderRadius: 2, background: countryComparison.approachPct > 90 ? FSX.amber : FSX.teal, transition: "width 0.3s ease" }} />
+                  <div style={{ width: 60, height: 3, borderRadius: 2, background: "rgba(255,255,255,0.08)", position: "relative", overflow: "hidden" }}>
+                    <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: Math.min(countryComparison.approachPct, 100) + "%", borderRadius: 2, background: countryComparison.approachPct > 90 ? FSX.amber : FSX.teal }} />
                   </div>
-                  <span style={{ fontSize: 9, color: countryComparison.approachPct > 90 ? FSX.amber : FSX.dim }}>{countryComparison.approachPct}%</span>
+                  <span style={{ color: countryComparison.approachPct > 90 ? FSX.amber : FSX.dim }}>{countryComparison.approachPct}%</span>
                 </div>
               )}
-            </div>}
+            </div>
           </div>
+
+          {/* Map legend (desktop only) */}
+          {!mob && (
+            <div style={{ position: "absolute", bottom: 10, right: px, display: "flex", gap: 12, fontSize: 9, fontFamily: "'JetBrains Mono', monospace", zIndex: 1 }}>
+              <span style={{ display: "flex", alignItems: "center", gap: 4 }}><span style={{ width: 10, height: 10, borderRadius: 2, background: FSX.teal, display: "inline-block" }} /> Headline</span>
+              <span style={{ display: "flex", alignItems: "center", gap: 4 }}><span style={{ width: 10, height: 10, borderRadius: 2, background: "rgba(0,191,165,0.4)", display: "inline-block" }} /> Exceeded</span>
+              <span style={{ display: "flex", alignItems: "center", gap: 4 }}><span style={{ width: 10, height: 10, borderRadius: 2, background: "rgba(255,255,255,0.04)", border: "1px solid " + FSX.amber, display: "inline-block" }} /> Approaching</span>
+              <span style={{ display: "flex", alignItems: "center", gap: 4 }}><span style={{ width: 10, height: 10, borderRadius: 2, background: "rgba(255,255,255,0.04)", display: "inline-block" }} /> Not exceeded</span>
+            </div>
+          )}
         </div>
       )}
 
