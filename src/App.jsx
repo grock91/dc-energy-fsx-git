@@ -286,7 +286,7 @@ export default function DCEnergyDashboard() {
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
       {/* ═══ TOP BAR — FSX LOGO + NAV ═══ */}
-      <div style={{ padding: "14px 32px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid " + FSX.border }}>
+      <div style={{ padding: "14px 32px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(0,191,165,0.15)", background: "linear-gradient(90deg, rgba(0,191,165,0.06) 0%, rgba(255,255,255,0.03) 50%, rgba(0,191,165,0.06) 100%)" }}>
         <a href={FSX_HOME} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
           <img src={FSX_LOGO_URL} alt="FutureScaleX" style={{ height: 28, objectFit: "contain" }} crossOrigin="anonymous"
             onError={(e) => { e.target.style.display = "none"; e.target.nextSibling.style.display = "flex"; }} />
@@ -295,8 +295,8 @@ export default function DCEnergyDashboard() {
           </span>
         </a>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-          <a href={CTA_ENERGY_AI} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: FSX.muted, textDecoration: "none", padding: "5px 12px", borderRadius: 6, border: "1px solid " + FSX.border }}>Energy & AI Research</a>
-          <a href={CTA_SOLUTIONS} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: FSX.muted, textDecoration: "none", padding: "5px 12px", borderRadius: 6, border: "1px solid " + FSX.border }}>Solutions</a>
+          <a href={CTA_ENERGY_AI} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: "#CBD5E1", textDecoration: "none", padding: "5px 12px", borderRadius: 6, border: "1px solid " + FSX.border }}>Energy & AI Research</a>
+          <a href={CTA_SOLUTIONS} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: "#CBD5E1", textDecoration: "none", padding: "5px 12px", borderRadius: 6, border: "1px solid " + FSX.border }}>Solutions</a>
           <a href={CTA_PRIMARY} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, fontWeight: 600, color: FSX.bg, textDecoration: "none", padding: "5px 16px", borderRadius: 6, background: FSX.teal }}>Schedule a Briefing</a>
         </div>
       </div>
