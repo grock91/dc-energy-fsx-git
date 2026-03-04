@@ -106,86 +106,86 @@ const GLOBAL_PCT = [[2000,0.4],[2005,0.6],[2010,0.8],[2015,1.0],[2018,1.2],[2020
 //  Sorted ascending by consumption. Used for the "DC exceeds country" analogy.
 // ═══════════════════════════════════════════════════════════════════
 const COUNTRY_ELEC = [
-  { name: "Malta", twh: 2.5, flag: "\uD83C\uDDF2\uD83C\uDDF9", region: "Europe" },
-  { name: "Montenegro", twh: 3.5, flag: "\uD83C\uDDF2\uD83C\uDDEA", region: "Europe" },
-  { name: "Jamaica", twh: 4.2, flag: "\uD83C\uDDEF\uD83C\uDDF2", region: "Latin America" },
-  { name: "Cyprus", twh: 5.2, flag: "\uD83C\uDDE8\uD83C\uDDFE", region: "Europe" },
-  { name: "Luxembourg", twh: 6.5, flag: "\uD83C\uDDF1\uD83C\uDDFA", region: "Europe" },
-  { name: "El Salvador", twh: 7, flag: "\uD83C\uDDF8\uD83C\uDDFB", region: "Latin America" },
-  { name: "Estonia", twh: 8.5, flag: "\uD83C\uDDEA\uD83C\uDDEA", region: "Europe" },
-  { name: "Latvia", twh: 7.5, flag: "\uD83C\uDDF1\uD83C\uDDFB", region: "Europe" },
-  { name: "Nepal", twh: 10, flag: "\uD83C\uDDF3\uD83C\uDDF5", region: "Asia Pacific" },
-  { name: "Bolivia", twh: 10.5, flag: "\uD83C\uDDE7\uD83C\uDDF4", region: "Latin America" },
-  { name: "Honduras", twh: 10.5, flag: "\uD83C\uDDED\uD83C\uDDF3", region: "Latin America" },
-  { name: "Trinidad & Tobago", twh: 10.5, flag: "\uD83C\uDDF9\uD83C\uDDF9", region: "Latin America" },
-  { name: "Cambodia", twh: 12, flag: "\uD83C\uDDF0\uD83C\uDDED", region: "Asia Pacific" },
-  { name: "Kenya", twh: 12.5, flag: "\uD83C\uDDF0\uD83C\uDDEA", region: "Africa" },
-  { name: "Costa Rica", twh: 12.5, flag: "\uD83C\uDDE8\uD83C\uDDF7", region: "Latin America" },
-  { name: "Panama", twh: 12.5, flag: "\uD83C\uDDF5\uD83C\uDDE6", region: "Latin America" },
-  { name: "Uruguay", twh: 12.5, flag: "\uD83C\uDDFA\uD83C\uDDFE", region: "Latin America" },
-  { name: "Lithuania", twh: 13, flag: "\uD83C\uDDF1\uD83C\uDDF9", region: "Europe" },
-  { name: "Guatemala", twh: 14, flag: "\uD83C\uDDEC\uD83C\uDDF9", region: "Latin America" },
-  { name: "Sri Lanka", twh: 17, flag: "\uD83C\uDDF1\uD83C\uDDF0", region: "Asia Pacific" },
-  { name: "Paraguay", twh: 17, flag: "\uD83C\uDDF5\uD83C\uDDFE", region: "Latin America" },
-  { name: "Ghana", twh: 18, flag: "\uD83C\uDDEC\uD83C\uDDED", region: "Africa" },
-  { name: "Croatia", twh: 19, flag: "\uD83C\uDDED\uD83C\uDDF7", region: "Europe" },
-  { name: "Iceland", twh: 20, flag: "\uD83C\uDDEE\uD83C\uDDF8", region: "Europe" },
-  { name: "Tunisia", twh: 21, flag: "\uD83C\uDDF9\uD83C\uDDF3", region: "Africa" },
-  { name: "Myanmar", twh: 25, flag: "\uD83C\uDDF2\uD83C\uDDF2", region: "Asia Pacific" },
-  { name: "Slovakia", twh: 28, flag: "\uD83C\uDDF8\uD83C\uDDF0", region: "Europe" },
-  { name: "Bahrain", twh: 32, flag: "\uD83C\uDDE7\uD83C\uDDED", region: "Middle East" },
-  { name: "Ireland", twh: 32, flag: "\uD83C\uDDEE\uD83C\uDDEA", region: "Europe" },
-  { name: "Denmark", twh: 34, flag: "\uD83C\uDDE9\uD83C\uDDF0", region: "Europe" },
-  { name: "Serbia", twh: 35, flag: "\uD83C\uDDF7\uD83C\uDDF8", region: "Europe" },
-  { name: "Nigeria", twh: 36, flag: "\uD83C\uDDF3\uD83C\uDDEC", region: "Africa" },
-  { name: "Bulgaria", twh: 38, flag: "\uD83C\uDDE7\uD83C\uDDEC", region: "Europe" },
-  { name: "New Zealand", twh: 43, flag: "\uD83C\uDDF3\uD83C\uDDFF", region: "Asia Pacific" },
-  { name: "Hungary", twh: 46, flag: "\uD83C\uDDED\uD83C\uDDFA", region: "Europe" },
-  { name: "Portugal", twh: 50, flag: "\uD83C\uDDF5\uD83C\uDDF9", region: "Europe" },
-  { name: "Greece", twh: 53, flag: "\uD83C\uDDEC\uD83C\uDDF7", region: "Europe" },
-  { name: "Singapore", twh: 57, flag: "\uD83C\uDDF8\uD83C\uDDEC", region: "Asia Pacific" },
-  { name: "Switzerland", twh: 58, flag: "\uD83C\uDDE8\uD83C\uDDED", region: "Europe" },
-  { name: "Romania", twh: 58, flag: "\uD83C\uDDF7\uD83C\uDDF4", region: "Europe" },
-  { name: "Czech Republic", twh: 66, flag: "\uD83C\uDDE8\uD83C\uDDFF", region: "Europe" },
-  { name: "Austria", twh: 69, flag: "\uD83C\uDDE6\uD83C\uDDF9", region: "Europe" },
-  { name: "Israel", twh: 70, flag: "\uD83C\uDDEE\uD83C\uDDF1", region: "Middle East" },
-  { name: "Belgium", twh: 82, flag: "\uD83C\uDDE7\uD83C\uDDEA", region: "Europe" },
-  { name: "Finland", twh: 83, flag: "\uD83C\uDDEB\uD83C\uDDEE", region: "Europe" },
-  { name: "Chile", twh: 87, flag: "\uD83C\uDDE8\uD83C\uDDF1", region: "Latin America" },
-  { name: "Colombia", twh: 82, flag: "\uD83C\uDDE8\uD83C\uDDF4", region: "Latin America" },
-  { name: "Bangladesh", twh: 102, flag: "\uD83C\uDDE7\uD83C\uDDE9", region: "Asia Pacific" },
-  { name: "Philippines", twh: 115, flag: "\uD83C\uDDF5\uD83C\uDDED", region: "Asia Pacific" },
-  { name: "Netherlands", twh: 112, flag: "\uD83C\uDDF3\uD83C\uDDF1", region: "Europe" },
-  { name: "Norway", twh: 130, flag: "\uD83C\uDDF3\uD83C\uDDF4", region: "Europe" },
-  { name: "Sweden", twh: 132, flag: "\uD83C\uDDF8\uD83C\uDDEA", region: "Europe" },
-  { name: "UAE", twh: 142, flag: "\uD83C\uDDE6\uD83C\uDDEA", region: "Middle East" },
-  { name: "Argentina", twh: 142, flag: "\uD83C\uDDE6\uD83C\uDDF7", region: "Latin America" },
-  { name: "Pakistan", twh: 155, flag: "\uD83C\uDDF5\uD83C\uDDF0", region: "Asia Pacific" },
-  { name: "Poland", twh: 172, flag: "\uD83C\uDDF5\uD83C\uDDF1", region: "Europe" },
-  { name: "Malaysia", twh: 185, flag: "\uD83C\uDDF2\uD83C\uDDFE", region: "Asia Pacific" },
-  { name: "Egypt", twh: 205, flag: "\uD83C\uDDEA\uD83C\uDDEC", region: "Africa" },
-  { name: "Thailand", twh: 212, flag: "\uD83C\uDDF9\uD83C\uDDED", region: "Asia Pacific" },
-  { name: "South Africa", twh: 215, flag: "\uD83C\uDDFF\uD83C\uDDE6", region: "Africa" },
-  { name: "Australia", twh: 242, flag: "\uD83C\uDDE6\uD83C\uDDFA", region: "Asia Pacific" },
-  { name: "Spain", twh: 252, flag: "\uD83C\uDDEA\uD83C\uDDF8", region: "Europe" },
-  { name: "Vietnam", twh: 275, flag: "\uD83C\uDDFB\uD83C\uDDF3", region: "Asia Pacific" },
-  { name: "Taiwan", twh: 282, flag: "\uD83C\uDDF9\uD83C\uDDFC", region: "Asia Pacific" },
-  { name: "United Kingdom", twh: 295, flag: "\uD83C\uDDEC\uD83C\uDDE7", region: "Europe" },
-  { name: "Italy", twh: 305, flag: "\uD83C\uDDEE\uD83C\uDDF9", region: "Europe" },
-  { name: "Indonesia", twh: 325, flag: "\uD83C\uDDEE\uD83C\uDDE9", region: "Asia Pacific" },
-  { name: "Mexico", twh: 335, flag: "\uD83C\uDDF2\uD83C\uDDFD", region: "Latin America" },
-  { name: "Turkey", twh: 345, flag: "\uD83C\uDDF9\uD83C\uDDF7", region: "Europe" },
-  { name: "Saudi Arabia", twh: 400, flag: "\uD83C\uDDF8\uD83C\uDDE6", region: "Middle East" },
-  { name: "France", twh: 440, flag: "\uD83C\uDDEB\uD83C\uDDF7", region: "Europe" },
-  { name: "Germany", twh: 530, flag: "\uD83C\uDDE9\uD83C\uDDEA", region: "Europe" },
-  { name: "Canada", twh: 580, flag: "\uD83C\uDDE8\uD83C\uDDE6", region: "North America" },
-  { name: "South Korea", twh: 600, flag: "\uD83C\uDDF0\uD83C\uDDF7", region: "Asia Pacific" },
-  { name: "Brazil", twh: 655, flag: "\uD83C\uDDE7\uD83C\uDDF7", region: "Latin America" },
-  { name: "Japan", twh: 910, flag: "\uD83C\uDDEF\uD83C\uDDF5", region: "Asia Pacific" },
-  { name: "Russia", twh: 1100, flag: "\uD83C\uDDF7\uD83C\uDDFA", region: "Europe" },
-  { name: "India", twh: 1900, flag: "\uD83C\uDDEE\uD83C\uDDF3", region: "Asia Pacific" },
-  { name: "United States", twh: 4100, flag: "\uD83C\uDDFA\uD83C\uDDF8", region: "North America" },
-  { name: "China", twh: 9500, flag: "\uD83C\uDDE8\uD83C\uDDF3", region: "Asia Pacific" },
+  { name: "Malta", twh: 2.5, code: "mt", region: "Europe" },
+  { name: "Montenegro", twh: 3.5, code: "me", region: "Europe" },
+  { name: "Jamaica", twh: 4.2, code: "jm", region: "Latin America" },
+  { name: "Cyprus", twh: 5.2, code: "cy", region: "Europe" },
+  { name: "Luxembourg", twh: 6.5, code: "lu", region: "Europe" },
+  { name: "El Salvador", twh: 7, code: "sv", region: "Latin America" },
+  { name: "Estonia", twh: 8.5, code: "ee", region: "Europe" },
+  { name: "Latvia", twh: 7.5, code: "lv", region: "Europe" },
+  { name: "Nepal", twh: 10, code: "np", region: "Asia Pacific" },
+  { name: "Bolivia", twh: 10.5, code: "bo", region: "Latin America" },
+  { name: "Honduras", twh: 10.5, code: "hn", region: "Latin America" },
+  { name: "Trinidad & Tobago", twh: 10.5, code: "tt", region: "Latin America" },
+  { name: "Cambodia", twh: 12, code: "kh", region: "Asia Pacific" },
+  { name: "Kenya", twh: 12.5, code: "ke", region: "Africa" },
+  { name: "Costa Rica", twh: 12.5, code: "cr", region: "Latin America" },
+  { name: "Panama", twh: 12.5, code: "pa", region: "Latin America" },
+  { name: "Uruguay", twh: 12.5, code: "uy", region: "Latin America" },
+  { name: "Lithuania", twh: 13, code: "lt", region: "Europe" },
+  { name: "Guatemala", twh: 14, code: "gt", region: "Latin America" },
+  { name: "Sri Lanka", twh: 17, code: "lk", region: "Asia Pacific" },
+  { name: "Paraguay", twh: 17, code: "py", region: "Latin America" },
+  { name: "Ghana", twh: 18, code: "gh", region: "Africa" },
+  { name: "Croatia", twh: 19, code: "hr", region: "Europe" },
+  { name: "Iceland", twh: 20, code: "is", region: "Europe" },
+  { name: "Tunisia", twh: 21, code: "tn", region: "Africa" },
+  { name: "Myanmar", twh: 25, code: "mm", region: "Asia Pacific" },
+  { name: "Slovakia", twh: 28, code: "sk", region: "Europe" },
+  { name: "Bahrain", twh: 32, code: "bh", region: "Middle East" },
+  { name: "Ireland", twh: 32, code: "ie", region: "Europe" },
+  { name: "Denmark", twh: 34, code: "dk", region: "Europe" },
+  { name: "Serbia", twh: 35, code: "rs", region: "Europe" },
+  { name: "Nigeria", twh: 36, code: "ng", region: "Africa" },
+  { name: "Bulgaria", twh: 38, code: "bg", region: "Europe" },
+  { name: "New Zealand", twh: 43, code: "nz", region: "Asia Pacific" },
+  { name: "Hungary", twh: 46, code: "hu", region: "Europe" },
+  { name: "Portugal", twh: 50, code: "pt", region: "Europe" },
+  { name: "Greece", twh: 53, code: "gr", region: "Europe" },
+  { name: "Singapore", twh: 57, code: "sg", region: "Asia Pacific" },
+  { name: "Switzerland", twh: 58, code: "ch", region: "Europe" },
+  { name: "Romania", twh: 58, code: "ro", region: "Europe" },
+  { name: "Czech Republic", twh: 66, code: "cz", region: "Europe" },
+  { name: "Austria", twh: 69, code: "at", region: "Europe" },
+  { name: "Israel", twh: 70, code: "il", region: "Middle East" },
+  { name: "Belgium", twh: 82, code: "be", region: "Europe" },
+  { name: "Finland", twh: 83, code: "fi", region: "Europe" },
+  { name: "Chile", twh: 87, code: "cl", region: "Latin America" },
+  { name: "Colombia", twh: 82, code: "co", region: "Latin America" },
+  { name: "Bangladesh", twh: 102, code: "bd", region: "Asia Pacific" },
+  { name: "Philippines", twh: 115, code: "ph", region: "Asia Pacific" },
+  { name: "Netherlands", twh: 112, code: "nl", region: "Europe" },
+  { name: "Norway", twh: 130, code: "no", region: "Europe" },
+  { name: "Sweden", twh: 132, code: "se", region: "Europe" },
+  { name: "UAE", twh: 142, code: "ae", region: "Middle East" },
+  { name: "Argentina", twh: 142, code: "ar", region: "Latin America" },
+  { name: "Pakistan", twh: 155, code: "pk", region: "Asia Pacific" },
+  { name: "Poland", twh: 172, code: "pl", region: "Europe" },
+  { name: "Malaysia", twh: 185, code: "my", region: "Asia Pacific" },
+  { name: "Egypt", twh: 205, code: "eg", region: "Africa" },
+  { name: "Thailand", twh: 212, code: "th", region: "Asia Pacific" },
+  { name: "South Africa", twh: 215, code: "za", region: "Africa" },
+  { name: "Australia", twh: 242, code: "au", region: "Asia Pacific" },
+  { name: "Spain", twh: 252, code: "es", region: "Europe" },
+  { name: "Vietnam", twh: 275, code: "vn", region: "Asia Pacific" },
+  { name: "Taiwan", twh: 282, code: "tw", region: "Asia Pacific" },
+  { name: "United Kingdom", twh: 295, code: "gb", region: "Europe" },
+  { name: "Italy", twh: 305, code: "it", region: "Europe" },
+  { name: "Indonesia", twh: 325, code: "id", region: "Asia Pacific" },
+  { name: "Mexico", twh: 335, code: "mx", region: "Latin America" },
+  { name: "Turkey", twh: 345, code: "tr", region: "Europe" },
+  { name: "Saudi Arabia", twh: 400, code: "sa", region: "Middle East" },
+  { name: "France", twh: 440, code: "fr", region: "Europe" },
+  { name: "Germany", twh: 530, code: "de", region: "Europe" },
+  { name: "Canada", twh: 580, code: "ca", region: "North America" },
+  { name: "South Korea", twh: 600, code: "kr", region: "Asia Pacific" },
+  { name: "Brazil", twh: 655, code: "br", region: "Latin America" },
+  { name: "Japan", twh: 910, code: "jp", region: "Asia Pacific" },
+  { name: "Russia", twh: 1100, code: "ru", region: "Europe" },
+  { name: "India", twh: 1900, code: "in", region: "Asia Pacific" },
+  { name: "United States", twh: 4100, code: "us", region: "North America" },
+  { name: "China", twh: 9500, code: "cn", region: "Asia Pacific" },
 ];
 
 // ─── SPARKLINE ────────────────────────────────────────────────────
@@ -205,8 +205,26 @@ function Sparkline({ points, year, width = 120, height = 36, color = FSX.teal })
   );
 }
 
+// ─── FLAG IMAGE (uses flagcdn.com, works on all platforms) ────────
+function Flag({ code, size = 20 }) {
+  if (!code) return null;
+  return <img src={"https://flagcdn.com/w40/" + code + ".png"} alt="" width={size} height={Math.round(size * 0.75)} style={{ borderRadius: 2, objectFit: "cover", verticalAlign: "middle" }} />;
+}
+
+// ─── RESPONSIVE HOOK ─────────────────────────────────────────────
+function useIsMobile(breakpoint = 768) {
+  const [mobile, setMobile] = useState(typeof window !== "undefined" && window.innerWidth < breakpoint);
+  useEffect(() => {
+    const handler = () => setMobile(window.innerWidth < breakpoint);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, [breakpoint]);
+  return mobile;
+}
+
 // ─── MAIN COMPONENT ───────────────────────────────────────────────
 export default function DCEnergyDashboard() {
+  const mob = useIsMobile();
   const [year, setYear] = useState(2024);
   const [level, setLevel] = useState("region");
   const [selectedRegion, setSelectedRegion] = useState(null);
@@ -269,39 +287,40 @@ export default function DCEnergyDashboard() {
 
   // Threshold color: matches the legend consistently across all levels
   const thresholdColor = (val) => val > 15 ? FSX.coral : val > 5 ? FSX.amber : FSX.teal;
+  const px = mob ? 16 : 32; // responsive horizontal padding
 
   return (
-    <div style={{ minHeight: "100vh", background: "linear-gradient(170deg, " + FSX.bg + " 0%, #0D1525 40%, " + FSX.surface + " 100%)", color: FSX.text, fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif" }}>
+    <div style={{ minHeight: "100vh", background: "linear-gradient(170deg, " + FSX.bg + " 0%, #0D1525 40%, " + FSX.surface + " 100%)", color: FSX.text, fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif", paddingBottom: mob ? 40 : 0 }}>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
       {/* ═══ HEADER ═══ */}
-      <div style={{ padding: "28px 32px 24px", borderBottom: "1px solid " + FSX.border, background: "linear-gradient(180deg, rgba(0,191,165,0.03) 0%, transparent 100%)" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 20 }}>
-          <div style={{ maxWidth: 640 }}>
-            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 3, color: FSX.dim, textTransform: "uppercase", marginBottom: 8 }}>Data Center Energy Observatory</div>
-            <h1 style={{ fontSize: 26, fontWeight: 700, margin: 0, lineHeight: 1.2, color: FSX.white }}>
+      <div style={{ padding: mob ? "20px 16px 16px" : "28px 32px 24px", borderBottom: "1px solid " + FSX.border, background: "linear-gradient(180deg, rgba(0,191,165,0.03) 0%, transparent 100%)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: mob ? "stretch" : "flex-start", flexDirection: mob ? "column" : "row", gap: mob ? 16 : 20 }}>
+          <div style={{ maxWidth: mob ? "100%" : 640 }}>
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: mob ? 9 : 11, letterSpacing: 3, color: FSX.dim, textTransform: "uppercase", marginBottom: 8 }}>Data Center Energy Observatory</div>
+            <h1 style={{ fontSize: mob ? 20 : 26, fontWeight: 700, margin: 0, lineHeight: 1.2, color: FSX.white }}>
               How Much of the Grid Do <span style={{ color: FSX.teal, fontStyle: "italic" }}>Data Centers</span> Consume?
             </h1>
-            <p style={{ fontSize: 13, color: FSX.muted, marginTop: 10, lineHeight: 1.65 }}>
+            <p style={{ fontSize: mob ? 12 : 13, color: FSX.muted, marginTop: 10, lineHeight: 1.65 }}>
               Data centers consumed <span style={{ color: FSX.white, fontWeight: 600 }}>1.5% of global electricity</span> in 2024, more than many entire countries.
               This dashboard tracks <span style={{ color: FSX.white, fontWeight: 600 }}>DC electricity as a share of total grid load</span> across regions, countries, and states, from 2000 to 2050 projections.
             </p>
-            <div style={{ display: "flex", gap: 16, marginTop: 12, fontSize: 12, color: FSX.dim }}>
+            {!mob && <div style={{ display: "flex", gap: 16, marginTop: 12, fontSize: 12, color: FSX.dim }}>
               <span><span style={{ color: FSX.teal, fontWeight: 600 }}>1.</span> Drag the year slider</span>
               <span><span style={{ color: FSX.teal, fontWeight: 600 }}>2.</span> Click any region to drill down</span>
               <span><span style={{ color: FSX.teal, fontWeight: 600 }}>3.</span> Explore country & state level</span>
-            </div>
+            </div>}
           </div>
-          <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
-            <div style={{ textAlign: "right" }}>
+          <div style={{ display: "flex", gap: mob ? 16 : 24, alignItems: "center", justifyContent: mob ? "space-around" : "flex-end" }}>
+            <div style={{ textAlign: mob ? "center" : "right" }}>
               <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: FSX.dim, letterSpacing: 1 }}>GLOBAL DC SHARE</div>
-              <div style={{ fontSize: 32, fontWeight: 700, fontFamily: "'JetBrains Mono', monospace", color: thresholdColor(globalPct) }}>{globalPct.toFixed(1)}%</div>
+              <div style={{ fontSize: mob ? 26 : 32, fontWeight: 700, fontFamily: "'JetBrains Mono', monospace", color: thresholdColor(globalPct) }}>{globalPct.toFixed(1)}%</div>
               <div style={{ fontSize: 10, color: FSX.faint, fontFamily: "'JetBrains Mono', monospace" }}>of world grid</div>
             </div>
             <div style={{ width: 1, height: 48, background: FSX.border }} />
-            <div style={{ textAlign: "right" }}>
+            <div style={{ textAlign: mob ? "center" : "right" }}>
               <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: FSX.dim, letterSpacing: 1 }}>CONSUMPTION</div>
-              <div style={{ fontSize: 32, fontWeight: 700, fontFamily: "'JetBrains Mono', monospace", color: FSX.white }}>{Math.round(globalTWh)} <span style={{ fontSize: 13, fontWeight: 400, color: FSX.muted }}>TWh</span></div>
+              <div style={{ fontSize: mob ? 26 : 32, fontWeight: 700, fontFamily: "'JetBrains Mono', monospace", color: FSX.white }}>{Math.round(globalTWh)} <span style={{ fontSize: 13, fontWeight: 400, color: FSX.muted }}>TWh</span></div>
               <div style={{ fontSize: 10, color: FSX.faint, fontFamily: "'JetBrains Mono', monospace" }}>in {year}</div>
             </div>
           </div>
@@ -310,56 +329,54 @@ export default function DCEnergyDashboard() {
 
       {/* ═══ COUNTRY COMPARISON BANNER ═══ */}
       {countryComparison.headline && (
-        <div style={{ padding: "18px 32px", borderBottom: "1px solid " + FSX.border, background: "linear-gradient(90deg, rgba(0,191,165,0.04) 0%, rgba(0,191,165,0.01) 50%, rgba(0,191,165,0.04) 100%)" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap" }}>
+        <div style={{ padding: (mob ? 14 : 18) + "px " + px + "px", borderBottom: "1px solid " + FSX.border, background: "linear-gradient(90deg, rgba(0,191,165,0.04) 0%, rgba(0,191,165,0.01) 50%, rgba(0,191,165,0.04) 100%)" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: mob ? 12 : 20, flexDirection: mob ? "column" : "row" }}>
             {/* Left: headline analogy */}
-            <div style={{ flex: "1 1 400px", minWidth: 320 }}>
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: 2, color: FSX.dim, textTransform: "uppercase", marginBottom: 6 }}>
+            <div style={{ flex: "1 1 auto", minWidth: 0 }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: mob ? 9 : 10, letterSpacing: 2, color: FSX.dim, textTransform: "uppercase", marginBottom: 6 }}>
                 Scale Comparison {"\u00B7"} {year}
               </div>
-              <div style={{ fontSize: 16, fontWeight: 600, color: FSX.text, lineHeight: 1.4 }}>
+              <div style={{ fontSize: mob ? 14 : 16, fontWeight: 600, color: FSX.text, lineHeight: 1.5 }}>
                 Data centers consume more electricity than{" "}
-                <span style={{ color: FSX.teal, fontWeight: 700, fontStyle: "italic", fontSize: 18, display: "inline-flex", alignItems: "center", gap: 5, background: "rgba(0,191,165,0.08)", padding: "2px 10px", borderRadius: 6, border: "1px solid rgba(0,191,165,0.15)" }}>
-                  {countryComparison.headline.flag} {countryComparison.headline.name}
+                <span style={{ color: FSX.teal, fontWeight: 700, fontStyle: "italic", fontSize: mob ? 15 : 18, display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(0,191,165,0.08)", padding: "2px 10px", borderRadius: 6, border: "1px solid rgba(0,191,165,0.15)" }}>
+                  <Flag code={countryComparison.headline.code} size={mob ? 18 : 22} /> {countryComparison.headline.name}
                 </span>
                 {"\u2019"}s entire electricity grid
               </div>
-              <div style={{ fontSize: 11, color: FSX.dim, marginTop: 6, fontFamily: "'JetBrains Mono', monospace" }}>
+              <div style={{ fontSize: mob ? 10 : 11, color: FSX.dim, marginTop: 6, fontFamily: "'JetBrains Mono', monospace" }}>
                 {countryComparison.headline.name}: {countryComparison.headline.twh} TWh {"\u00B7"} Global DCs: {Math.round(countryComparison.dcTWh)} TWh
                 <span style={{ marginLeft: 12, color: FSX.muted }}>{"\u2192"} exceeds <span style={{ color: FSX.teal, fontWeight: 600 }}>{countryComparison.total}</span> countries</span>
               </div>
             </div>
 
-            {/* Right: recently exceeded country pills + approaching */}
-            <div style={{ flex: "0 0 auto", display: "flex", flexDirection: "column", gap: 8, alignItems: "flex-end" }}>
-              {/* Recently exceeded pills */}
+            {/* Right: recently exceeded country pills + approaching (hidden on mobile) */}
+            {!mob && <div style={{ flex: "0 0 auto", display: "flex", flexDirection: "column", gap: 8, alignItems: "flex-end" }}>
               <div style={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "flex-end" }}>
                 {countryComparison.recentBig.map(c => (
-                  <span key={c.name} style={{ fontSize: 10, padding: "3px 8px", borderRadius: 5, background: "rgba(0,191,165,0.06)", border: "1px solid rgba(0,191,165,0.12)", color: FSX.muted, fontFamily: "'JetBrains Mono', monospace", whiteSpace: "nowrap" }}>
-                    {c.flag} {c.name} <span style={{ color: FSX.dim }}>{c.twh} TWh</span>
+                  <span key={c.name} style={{ fontSize: 10, padding: "3px 8px", borderRadius: 5, background: "rgba(0,191,165,0.06)", border: "1px solid rgba(0,191,165,0.12)", color: FSX.muted, fontFamily: "'JetBrains Mono', monospace", whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", gap: 4 }}>
+                    <Flag code={c.code} size={14} /> {c.name} <span style={{ color: FSX.dim }}>{c.twh} TWh</span>
                   </span>
                 ))}
               </div>
-              {/* Approaching next country */}
               {countryComparison.approaching && (
-                <div style={{ fontSize: 10, color: FSX.dim, fontFamily: "'JetBrains Mono', monospace", textAlign: "right" }}>
-                  Approaching: {countryComparison.approaching.flag} {countryComparison.approaching.name} ({countryComparison.approaching.twh} TWh)
-                  <div style={{ marginTop: 3, height: 3, width: 120, borderRadius: 2, background: "rgba(255,255,255,0.06)", position: "relative", overflow: "hidden" }}>
+                <div style={{ fontSize: 10, color: FSX.dim, fontFamily: "'JetBrains Mono', monospace", textAlign: "right", display: "flex", alignItems: "center", gap: 6 }}>
+                  <span>Approaching: <Flag code={countryComparison.approaching.code} size={14} /> {countryComparison.approaching.name} ({countryComparison.approaching.twh} TWh)</span>
+                  <div style={{ width: 80, height: 3, borderRadius: 2, background: "rgba(255,255,255,0.06)", position: "relative", overflow: "hidden", display: "inline-block" }}>
                     <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: Math.min(countryComparison.approachPct, 100) + "%", borderRadius: 2, background: countryComparison.approachPct > 90 ? FSX.amber : FSX.teal, transition: "width 0.3s ease" }} />
                   </div>
-                  <span style={{ fontSize: 9, color: countryComparison.approachPct > 90 ? FSX.amber : FSX.dim }}>{countryComparison.approachPct}% there</span>
+                  <span style={{ fontSize: 9, color: countryComparison.approachPct > 90 ? FSX.amber : FSX.dim }}>{countryComparison.approachPct}%</span>
                 </div>
               )}
-            </div>
+            </div>}
           </div>
         </div>
       )}
 
       {/* ═══ YEAR SLIDER ═══ */}
-      <div style={{ padding: "16px 32px", background: "rgba(0,0,0,0.15)", borderBottom: "1px solid " + FSX.border }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+      <div style={{ padding: (mob ? 12 : 16) + "px " + px + "px", background: "rgba(0,0,0,0.15)", borderBottom: "1px solid " + FSX.border }}>
+        <div style={{ display: "flex", alignItems: "center", gap: mob ? 10 : 16 }}>
           <button onClick={() => setIsPlaying(!isPlaying)}
-            style={{ width: 42, height: 42, borderRadius: "50%", background: isPlaying ? FSX.coral : FSX.teal, border: "none", color: FSX.bg, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, fontWeight: 700, flexShrink: 0, boxShadow: isPlaying ? "0 0 16px rgba(255,107,107,0.4)" : "0 0 16px " + FSX.tealGlow }}>
+            style={{ width: mob ? 36 : 42, height: mob ? 36 : 42, borderRadius: "50%", background: isPlaying ? FSX.coral : FSX.teal, border: "none", color: FSX.bg, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: mob ? 14 : 16, fontWeight: 700, flexShrink: 0, boxShadow: isPlaying ? "0 0 16px rgba(255,107,107,0.4)" : "0 0 16px " + FSX.tealGlow }}>
             {isPlaying ? "\u23F8" : "\u25B6"}
           </button>
           <div style={{ flex: 1, position: "relative" }}>
@@ -384,8 +401,8 @@ export default function DCEnergyDashboard() {
       </div>
 
       {/* ═══ BREADCRUMB ═══ */}
-      <div style={{ padding: "12px 32px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid " + FSX.border }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 13 }}>
+      <div style={{ padding: (mob ? 10 : 12) + "px " + px + "px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid " + FSX.border }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 4, fontSize: mob ? 12 : 13 }}>
           {breadcrumb.map((b, i) => (
             <span key={i} style={{ display: "flex", alignItems: "center", gap: 4 }}>
               {i > 0 && <span style={{ color: FSX.faint }}>{"\u203A"}</span>}
@@ -397,7 +414,7 @@ export default function DCEnergyDashboard() {
       </div>
 
       {/* ═══ DATA BARS ═══ */}
-      <div style={{ padding: "16px 32px", overflowY: "auto", maxHeight: "calc(100vh - 410px)" }}>
+      <div style={{ padding: (mob ? 12 : 16) + "px " + px + "px", overflowY: "auto", maxHeight: mob ? "none" : "calc(100vh - 410px)" }}>
         {currentData.map((item, idx) => {
           const canDrill = (level === "region") || (level === "country" && COUNTRY_DATA[item.name]?.states);
           const barWidth = Math.max((item.value / Math.max(maxBarValue, 1)) * 100, 0.5);
@@ -405,30 +422,30 @@ export default function DCEnergyDashboard() {
           const intensity = item.value > 20 ? 1 : item.value > 10 ? 0.85 : item.value > 5 ? 0.7 : item.value > 2 ? 0.55 : 0.4;
           return (
             <div key={item.name} onClick={() => canDrill && handleDrillDown(item)} onMouseEnter={() => setHoveredItem(item.name)} onMouseLeave={() => setHoveredItem(null)}
-              style={{ display: "flex", alignItems: "center", gap: 14, padding: "11px 16px", borderRadius: 10, marginBottom: 6, background: hoveredItem === item.name ? "rgba(0,191,165,0.04)" : "rgba(255,255,255,0.015)", border: "1px solid " + (hoveredItem === item.name ? "rgba(0,191,165,0.15)" : FSX.border), cursor: canDrill ? "pointer" : "default", transition: "all 0.2s ease" }}>
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: FSX.faint, width: 18, textAlign: "right", flexShrink: 0 }}>{idx + 1}</div>
-              <div style={{ width: 170, flexShrink: 0 }}>
-                <div style={{ fontSize: 14, fontWeight: 600, color: FSX.text, display: "flex", alignItems: "center", gap: 6 }}>
+              style={{ display: "flex", alignItems: "center", gap: mob ? 8 : 14, padding: mob ? "9px 10px" : "11px 16px", borderRadius: 10, marginBottom: 6, background: hoveredItem === item.name ? "rgba(0,191,165,0.04)" : "rgba(255,255,255,0.015)", border: "1px solid " + (hoveredItem === item.name ? "rgba(0,191,165,0.15)" : FSX.border), cursor: canDrill ? "pointer" : "default", transition: "all 0.2s ease" }}>
+              {!mob && <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: FSX.faint, width: 18, textAlign: "right", flexShrink: 0 }}>{idx + 1}</div>}
+              <div style={{ width: mob ? 100 : 170, flexShrink: 0 }}>
+                <div style={{ fontSize: mob ? 12 : 14, fontWeight: 600, color: FSX.text, display: "flex", alignItems: "center", gap: 6 }}>
                   {item.name}
-                  {canDrill && <span style={{ fontSize: 9, color: FSX.dim, background: "rgba(0,191,165,0.08)", padding: "1px 5px", borderRadius: 3, border: "1px solid rgba(0,191,165,0.15)" }}>drill {"\u2192"}</span>}
+                  {canDrill && !mob && <span style={{ fontSize: 9, color: FSX.dim, background: "rgba(0,191,165,0.08)", padding: "1px 5px", borderRadius: 3, border: "1px solid rgba(0,191,165,0.15)" }}>drill {"\u2192"}</span>}
                 </div>
-                <div style={{ marginTop: 3 }}><Sparkline points={item.points} year={year} color={barColor} width={130} height={26} /></div>
+                {!mob && <div style={{ marginTop: 3 }}><Sparkline points={item.points} year={year} color={barColor} width={130} height={26} /></div>}
               </div>
-              <div style={{ flex: 1, position: "relative", height: 26 }}>
+              <div style={{ flex: 1, position: "relative", height: mob ? 20 : 26 }}>
                 <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: barWidth + "%", borderRadius: 6, background: "linear-gradient(90deg, " + barColor + Math.round(intensity * 255).toString(16).padStart(2, "0") + " 0%, " + barColor + Math.round(intensity * 0.5 * 255).toString(16).padStart(2, "0") + " 100%)", transition: "width 0.3s ease" }} />
-                {item.value > 12 && <div style={{ position: "absolute", left: 8, top: "50%", transform: "translateY(-50%)", fontSize: 10, fontFamily: "'JetBrains Mono', monospace", color: "rgba(255,255,255,0.7)", zIndex: 1 }}>{item.value.toFixed(1)}%</div>}
+                {item.value > 12 && !mob && <div style={{ position: "absolute", left: 8, top: "50%", transform: "translateY(-50%)", fontSize: 10, fontFamily: "'JetBrains Mono', monospace", color: "rgba(255,255,255,0.7)", zIndex: 1 }}>{item.value.toFixed(1)}%</div>}
               </div>
-              <div style={{ width: 65, textAlign: "right", flexShrink: 0, fontFamily: "'JetBrains Mono', monospace" }}>
-                <div style={{ fontSize: 17, fontWeight: 700, color: barColor }}>{item.value.toFixed(1)}%</div>
+              <div style={{ width: mob ? 50 : 65, textAlign: "right", flexShrink: 0, fontFamily: "'JetBrains Mono', monospace" }}>
+                <div style={{ fontSize: mob ? 14 : 17, fontWeight: 700, color: barColor }}>{item.value.toFixed(1)}%</div>
               </div>
             </div>
           );
         })}
 
         {/* ═══ LEGEND & SOURCES ═══ */}
-        <div style={{ marginTop: 20, padding: "18px 20px", borderRadius: 10, background: "rgba(255,255,255,0.015)", border: "1px solid " + FSX.border }}>
+        <div style={{ marginTop: 20, padding: mob ? "14px 12px" : "18px 20px", borderRadius: 10, background: "rgba(255,255,255,0.015)", border: "1px solid " + FSX.border }}>
           <div style={{ fontSize: 11, fontWeight: 600, color: FSX.dim, marginBottom: 10, letterSpacing: 1, textTransform: "uppercase", fontFamily: "'JetBrains Mono', monospace" }}>How to Read This Dashboard</div>
-          <div style={{ display: "flex", gap: 20, flexWrap: "wrap", marginBottom: 12 }}>
+          <div style={{ display: "flex", gap: mob ? 10 : 20, flexWrap: "wrap", marginBottom: 12 }}>
             {[{ color: FSX.teal, label: "< 5% of grid, modest share" }, { color: FSX.amber, label: "5\u201315%, significant load" }, { color: FSX.coral, label: "> 15%, critical grid pressure" }].map(t => (
               <div key={t.label} style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <div style={{ width: 10, height: 10, borderRadius: 3, background: t.color }} />
