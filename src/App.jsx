@@ -253,7 +253,16 @@ function WorldMap({ exceededCodes, headlineCode, approachingCode, width, height 
     pad + ((LAT_MAX - Math.max(LAT_MIN, Math.min(LAT_MAX, lat))) / (LAT_MAX - LAT_MIN)) * h
   ];
 
-  const ringToPath = (ring) => "M" + ring.map(p => { const [x, y] = proj(p); return x.toFixed(1) + "," + y.toFixed(1); }).join("L") + "Z";
+  // Ring to SVG path, breaking at antimeridian crossings (lon jump > 170°)
+  const ringToPath = (ring) => {
+    let d = "";
+    for (let i = 0; i < ring.length; i++) {
+      const [x, y] = proj(ring[i]);
+      const cmd = i === 0 ? "M" : (Math.abs(ring[i][0] - ring[i - 1][0]) > 170 ? "M" : "L");
+      d += cmd + x.toFixed(1) + "," + y.toFixed(1);
+    }
+    return d + "Z";
+  };
   const geoPath = (geom) => {
     if (!geom) return "";
     if (geom.type === "Polygon") return geom.coordinates.map(ringToPath).join(" ");
@@ -301,12 +310,12 @@ export default function DCEnergyDashboard() {
   const mob = useIsMobile();
   const mapRef = useRef(null);
   const [mapW, setMapW] = useState(800);
-  const [year, setYear] = useState(2024);
+  const [year, setYear] = useState(2000);
   const [level, setLevel] = useState("region");
   const [selectedRegion, setSelectedRegion] = useState(null);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [hoveredItem, setHoveredItem] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const intervalRef = useRef(null);
 
   useEffect(() => {
@@ -488,7 +497,7 @@ export default function DCEnergyDashboard() {
               <div style={{ position: "absolute", left: 0, right: 0, height: 8, borderRadius: 4, background: "rgba(255,255,255,0.06)" }} />
               <div style={{ position: "absolute", left: 0, height: 8, borderRadius: 4, width: ((year - 2000) / 50 * 100) + "%", background: globalPct > 5 ? (globalPct > 15 ? "linear-gradient(90deg, " + FSX.teal + " 0%, " + FSX.amber + " 60%, " + FSX.coral + " 100%)" : "linear-gradient(90deg, " + FSX.teal + " 0%, " + FSX.amber + " 100%)") : FSX.teal, transition: "width 0.15s ease" }} />
               <div style={{ position: "absolute", left: ((2026 - 2000) / 50 * 100) + "%", top: -2, width: 2, height: 32, background: "rgba(255,183,77,0.5)", borderRadius: 1 }} />
-              <input type="range" min={2000} max={2050} step={1} value={year} onChange={e => setYear(+e.target.value)} style={{ position: "absolute", left: 0, right: 0, width: "100%", height: 28, opacity: 0, cursor: "pointer", zIndex: 2 }} />
+              <input type="range" min={2000} max={2050} step={1} value={year} onChange={e => { setIsPlaying(false); setYear(+e.target.value); }} style={{ position: "absolute", left: 0, right: 0, width: "100%", height: 28, opacity: 0, cursor: "pointer", zIndex: 2 }} />
               <div style={{ position: "absolute", left: "calc(" + ((year - 2000) / 50 * 100) + "% - 10px)", width: 20, height: 20, borderRadius: "50%", background: globalPct > 15 ? FSX.coral : globalPct > 5 ? FSX.amber : FSX.teal, boxShadow: "0 0 14px " + (globalPct > 15 ? "rgba(255,107,107,0.5)" : globalPct > 5 ? "rgba(255,183,77,0.5)" : FSX.tealGlow), border: "3px solid " + FSX.bg, pointerEvents: "none", transition: "background 0.3s ease" }} />
             </div>
           </div>
